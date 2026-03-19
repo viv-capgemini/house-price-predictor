@@ -28,8 +28,16 @@ jobs:
       run: |
         mkdir -p configs
         cat > configs/model_config.yaml <<'EOF'
+model:
+  name: house_price_predictor
+  best_model: RandomForest
+  target_variable: price
+  parameters:
+    n_estimators: 100
+    max_depth: 20
+    random_state: 42
+EOF
 
-  
     - name: Run Data Processing Tests
       run: |
         python src/data/run_processing.py \
