@@ -29,13 +29,22 @@ jobs:
         python src/data/run_processing.py \
           --input data/raw/house_data.csv   \
           --output data/processed/cleaned_house_data.csv
+
     - name: Run Feature Engineering Tests
       run: |
         python src/features/engineer.py   \
           --input data/processed/cleaned_house_data.csv   \
           --output data/processed/featured_house_data.csv   \
           --preprocessor models/trained/preprocessor.pkl
-          
+    
+    - name: Setup MLflow Tracking Server
+      run: |
+        docker pull mlflow/mlflow:latest
+        docker run -d -p 5555:5000 --name mlflow-server mlflow/mlflow:latest \
+        mlflow server --host 0.0.0.0 \
+        --backend-store-uri sqlite:///mlflow.db \
+        --default-artifact-root /tmp/mlruns
+
     - name: Run Training and experiment
       run: |
         python src/models/train_model.py   \
