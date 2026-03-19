@@ -53,7 +53,17 @@ def main(args):
     # Load config
     with open(args.config, 'r') as f:
         config = yaml.safe_load(f)
-    model_cfg = config['model']
+
+    # Support two formats: {"model": {...}} or legacy direct model mapping
+    if isinstance(config, dict) and 'model' in config:
+        model_cfg = config['model']
+    elif isinstance(config, dict) and all(k in config for k in ['name', 'best_model', 'parameters', 'target_variable']):
+        model_cfg = config
+    else:
+        raise ValueError(
+            f"Invalid config format in '{args.config}'. Expected top-level 'model' key or direct model fields. "
+            f"Found keys: {list(config.keys()) if isinstance(config, dict) else type(config)}"
+        )
 
     if args.mlflow_tracking_uri:
         mlflow.set_tracking_uri(args.mlflow_tracking_uri)

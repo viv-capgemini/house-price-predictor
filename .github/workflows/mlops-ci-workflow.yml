@@ -24,6 +24,23 @@ jobs:
         python -m pip install --upgrade pip
         pip install  -r requirements.txt
 
+    - name: Ensure model config exists
+      run: |
+        mkdir -p configs
+        cat > configs/model_config.yaml <<'EOF'
+model:
+  name: house_price_model
+  best_model: RandomForest
+  parameters:
+    n_estimators: 100
+    max_depth: 10
+  target_variable: price
+  r2_score: 0.0
+  mae: 0.0
+  rmse: 0.0
+  feature_sets: {}
+EOF
+
     - name: Run Data Processing Tests
       run: |
         python src/data/run_processing.py \
