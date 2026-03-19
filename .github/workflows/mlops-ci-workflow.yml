@@ -86,7 +86,7 @@ jobs:
     - name: Build and push
       uses: docker/build-push-action@v7
       with:
+          push: true
+          tags: voa2000/fastapi:{{ github.sha }}
           file: Dockerfile
           context: .
-          push: true
-          tags: voa2000/ml-model:{{ github.sha }}
