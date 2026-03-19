@@ -1,6 +1,10 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: myapp
-data:
-  key: value
+run: house_price_model
+  best_model: RandomForest
+  parameters:
+    n_estimators: 100
+    max_depth: 10
+  target_variable: price
+  r2_score: 0.0
+  mae: 0.0
+  rmse: 0.0
+  feature_sets: {}
