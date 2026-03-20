@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  fastapi:
+    image: voa2000/fastapi:dev 
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    container_name: fastapi-app
+
+  streamlit:
+    image: voa2000/streamlit:dev 
+    build:
+      context: ./streamlit_app
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    container_name: streamlit-app
+    environment:
+      API_URL: http://fastapi:8000
+    depends_on:
+      - fastapi 
