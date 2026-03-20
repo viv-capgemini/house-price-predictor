@@ -27,4 +27,6 @@ jobs:
       with:
         context: ./streamlit_app
         push: true
-        tags: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/streamlit:latest
+        tags: |
+            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/streamlit:latest
+            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/streamlit:${{ github.sha }}
