@@ -1,14 +1,16 @@
 version: '3.8'
 
 services:
-  house-price-model:
+  model:
     image: voa2000/house-price-model:dev 
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8000:8000"
-    container_name: house-price-model-app
+      - "8002:8000"
+    container_name: model-app
+    networks:
+      - house-price-network
 
   streamlit:
     image: voa2000/streamlit:dev 
@@ -21,4 +23,10 @@ services:
     environment:
       API_URL: http://model:8000
     depends_on:
-      - house-price-model 
+      - model
+    networks:
+      - house-price-network
+
+networks:
+  house-price-network:
+    name: house-price-network

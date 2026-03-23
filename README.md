@@ -89,17 +89,6 @@ Access the MLflow UI at [http://localhost:5555](http://localhost:5555)
 
 ---
 
-## 📒 Using JupyterLab (Optional)
-
-If you prefer an interactive experience, launch JupyterLab with:
-
-```bash
-uv python -m jupyterlab
-# or
-python -m jupyterlab
-```
-
----
 
 ## 🔁 Model Workflow
 
