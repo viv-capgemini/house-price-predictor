@@ -160,6 +160,7 @@ jobs:
           file: ./src/api/Dockerfile
           push: true
           tags: |
+            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:v1.0.0
             docker.io/${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:latest
-            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:${{ env.VERSION }}-${{ env.SHORT_SHA }}
+            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:${{ env.SHORT_SHA }}
 
