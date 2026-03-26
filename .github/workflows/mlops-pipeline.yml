@@ -29,6 +29,20 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
 
+    - name: Ensure model config exists
+      run: |
+        mkdir -p configs
+        cat > configs/model_config.yaml <<'EOF'
+        model:
+          name: house_price_predictor
+          best_model: RandomForest
+          target_variable: price
+          parameters:
+            n_estimators: 100
+            max_depth: 20
+            random_state: 42
+        EOF
+
     - name: Process data
       run: |
         python src/data/run_processing.py \
@@ -134,16 +148,19 @@ jobs:
     
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
-    - name: Log in to DockerHub Container Registry
-      uses: docker/login-action@v3
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v4
       with:
-        registry: docker.io
-        username: ${{ vars.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
       with:
         context: .
         file: ./Dockerfile
         push: true
-        tags: docker.io/${{ vars.DOCKERHUB_USERNAME }}/house-price-model:latest
+        tags: |
+          docker.io/${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:latest
+          docker.io/${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:${{ github.sha }}
