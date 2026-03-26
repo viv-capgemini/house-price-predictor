@@ -161,6 +161,5 @@ jobs:
           push: true
           tags: |
             docker.io/${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:latest
-            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:${GITHUB_SHA::6}
-            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:${VERSION}-${SHORT_SHA}
+            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:${{ env.VERSION }}-${{ env.SHORT_SHA }}
 
