@@ -144,9 +144,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Set short SHA
-      run: echo "SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
-
     - name: Extract version
       run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
@@ -162,5 +159,4 @@ jobs:
           tags: |
             docker.io/${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:v1.0.0
             docker.io/${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:latest
-            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:${{ env.SHORT_SHA }}
 
