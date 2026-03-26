@@ -2,15 +2,8 @@ name: MLOps Model Training Pipeline
 
 on:
   push:
-    branches: [ main ]
-    paths:
-      - src/api/**
-      - models/trained/**
-      - .github/workflows/model-ci.yml
-
-  pull_request:
-    branches: [ main ]
-
+    branches: [ main]
+    
 jobs:
   data-processing:
     runs-on: ubuntu-latest
