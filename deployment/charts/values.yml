@@ -1,0 +1,20 @@
+grafana:
+  service:
+    type: NodePort
+    nodePort: 30200
+
+prometheus:
+  service:
+    type: NodePort
+    nodePort: 30300
+
+# In local kind clusters, control-plane component metrics endpoints are often
+# not reachable from the monitoring namespace, which causes persistent scrape errors.
+kubeControllerManager:
+  enabled: false
+
+kubeScheduler:
+  enabled: false
+
+kubeEtcd:
+  enabled: false

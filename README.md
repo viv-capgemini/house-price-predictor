@@ -13,20 +13,25 @@ Check out the [MLOps Bootcamp at School of DevOps](https://schoolofdevops.com) t
 
 ```
 house-price-predictor/
-├── configs/                # YAML-based configuration for models
-├── data/                   # Raw and processed datasets
+├── configs/                     # YAML-based configuration for models
+├── data/                        # Raw and processed datasets
 ├── deployment/
-│   └── mlflow/             # Docker Compose setup for MLflow
-├── models/                 # Trained models and preprocessors
-├── notebooks/              # Optional Jupyter notebooks for experimentation
+|   ├── kubernetes/              # Kubernetes manifest files
+|   ├── mlflow/                  # Docker Compose setup for MLflow 
+│   └── charts/
+|        ├── prometheus
+|        ├── house-price-model
+|        ├──
+|         
+├── models/                      # Trained models and preprocessors
+├── notebooks/                   # Optional Jupyter notebooks for experimentation
 ├── src/
-│   ├── data/               # Data cleaning and preprocessing scripts
-│   ├── features/           # Feature engineering pipeline
-│   ├── models/             # Model training and evaluation
-├── requirements.txt        # Python dependencies
-└── README.md               # You’re here!
+│   ├── data/                    # Data cleaning and preprocessing scripts
+│   ├── features/                # Feature engineering pipeline
+│   ├── models/                  # Model training and evaluation
+├── requirements.txt             # Python dependencies
+└── README.md                    # You’re here!
 ```
-
 ---
 
 ## 🛠️ Setting up Learning/Development Environment
@@ -37,7 +42,7 @@ To begin, ensure the following tools are installed on your system:
 - [Git](https://git-scm.com/)
 - [Visual Studio Code](https://code.visualstudio.com/) or your preferred editor
 - [UV – Python package and environment manager](https://github.com/astral-sh/uv)
-- [Docker Desktop](https://www.docker.com/products/docker-desktop/) **or** [Podman Desktop](https://podman-desktop.io/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/) 
 
 ---
 
@@ -48,9 +53,8 @@ To begin, ensure the following tools are installed on your system:
 2. **Clone your forked copy:**
 
    ```bash
-   # Replace xxxxxx with your GitHub username or org
-   git clone https://github.com/xxxxxx/house-price-predictor.git
-   cd house-price-predictor
+   git clone git@gitlab.com:machine-learning2861113/house-price-model.git
+   cd house-price-model
    ```
 
 3. **Setup Python Virtual Environment using UV:**
@@ -59,13 +63,19 @@ To begin, ensure the following tools are installed on your system:
    uv venv --python python3.11
    source .venv/bin/activate
    ```
-
+4. **Build a KIND cluster:**
+  ```
+  git clone https://github.com/initcron/k8s-code.git
+  cd k8s-code/helper/kind/
+  kind create cluster --config kind-three-node-cluster.yaml
+  kubectl cluster-info --context kind-kind
+  kubectl get nodes
+  ```
 4. **Install dependencies:**
 
    ```bash
    uv pip install -r requirements.txt
    ```
-
 ---
 
 ## 📊 Setup MLflow for Experiment Tracking
@@ -78,17 +88,21 @@ docker compose -f mlflow-docker-compose.yml up -d
 docker compose ps
 ```
 
-> 🐧 **Using Podman?** Use this instead:
-
-```bash
-podman compose -f mlflow-docker-compose.yml up -d
-podman compose ps
-```
-
 Access the MLflow UI at [http://localhost:5555](http://localhost:5555)
 
 ---
 
+## 📒 Using JupyterLab (Optional)
+
+If you prefer an interactive experience, launch JupyterLab with:
+
+```bash
+uv python -m jupyterlab
+# or
+python -m jupyterlab
+```
+
+---
 
 ## 🔁 Model Workflow
 
@@ -117,11 +131,10 @@ python src/features/engineer.py   --input data/processed/cleaned_house_data.csv 
 Train your model and log everything to MLflow:
 
 ```bash
-python src/models/train_model.py   --config configs/model_config.yaml   --data data/processed/featured_house_data.csv   --models-dir src/models   --mlflow-tracking-uri http://localhost:5555
+python src/models/train_model.py   --config configs/model_config.yaml   --data data/processed/featured_house_data.csv   --models-dir models/trained   --mlflow-tracking-uri http://localhost:5555
 ```
 
 ---
-
 
 ## Building FastAPI and Streamlit 
 
@@ -155,22 +168,159 @@ Be sure to replace `http://localhost:8000/predict` with actual endpoint based on
 
 ## 🧠 Learn More About MLOps
 
-This project is part of the [**MLOps Bootcamp**](https://schoolofdevops.com) at School of DevOps, where you'll learn how to:
+In this project you'll learn how to:
 
 - Build and track ML pipelines
 - Containerize and deploy models
 - Automate training workflows using GitHub Actions or Argo Workflows
 - Apply DevOps principles to Machine Learning systems
+## 🧠 Application Endpoints
+Kubernates deployment ` `
+API endpoint in kubernates http://localhost:30100/docs#/
+Streamlit endpoint http://localhost:30000/
 
-🔗 [Get Started with MLOps →](https://schoolofdevops.com)
+## With Kubernates
+- using KIND -https://kubernetes-tutorial.schoolofdevops.com/adv_kubernetes-setup/#
 
----
+## Deploying Prometheus
+```
+helm upgrade --install prometheus \
+  -n monitoring \
+  --create-namespace \
+  prometheus-community/kube-prometheus-stack \
+  -f deployment/charts/monitoring/values.yml
+```
+- status of endpoint can be found here - http://localhost:30300/targets
+- Get password with `kubectl get secret --namespace monitoring -l app.kubernetes.io/component=admin-secret -o jsonpath="{.items[0].data.admin-password}" | base64 --decode ; echo`
+## Metrics you can scrape from promethus
+- http_requests_total
+- histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[1m]))
+by (le, handler))
+- rate(http_request_size_bytes_sum[1m])
+## Kubernates Auto scalers with KEDA
+- Installing KEDA via HELM 
+```
+helm repo add kedacore https://kedacore.github.io/charts
+helm repo update
+helm install keda kedacore/keda \
+ --namespace keda \
+ --create-namespace
+```
+- Validate - `kubectl get all -n keda`
+- keda
+## Load Test with Hey
+- installation of hey on mack ```brew install hey```
+- Make a prediction
+```
+curl -X POST http://localhost:30100/predict \
+-H "Content-Type: application/json" \
+-d @deployment/charts/monitoring/predict.json
+```
+- Results
+```
+{"predicted_price":837567.34,"confidence_interval":[753810.61,921324.07],"features_importance":{},"prediction_time":"2026-03-24T14:39:03.064992"}%
+```
+- Run a longer load test making 5000 request
+```
+hey -n 5000 -c 200 -m POST \
+-H "Content-Type: application/json" \
+-D deployment/charts/monitoring/predict.json \
+http://localhost:30100/predict
+```
+- Sample output
+```
+Summary:
+  Total:        71.9109 secs
+  Slowest:      3.8930 secs
+  Fastest:      0.0041 secs
+  Average:      2.3584 secs
+  Requests/sec: 69.5305
+  
+  Total data:   725000 bytes
+  Size/request: 145 bytes
 
-## 🤝 Contributing
+Response time histogram:
+  0.004 [1]     |
+  0.393 [23]    |■
+  0.782 [15]    |
+  1.171 [31]    |■
+  1.560 [40]    |■
+  1.949 [759]   |■■■■■■■■■■■■■■■■■
+  2.337 [1830]  |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  2.726 [1385]  |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  3.115 [573]   |■■■■■■■■■■■■■
+  3.504 [188]   |■■■■
+  3.893 [155]   |■■■
 
-We welcome contributions, issues, and suggestions to make this project even better. Feel free to fork, explore, and raise PRs!
 
----
+Latency distribution:
+  10%% in 1.8926 secs
+  25%% in 2.0023 secs
+  50%% in 2.2063 secs
+  75%% in 2.6976 secs
+  90%% in 2.9971 secs
+  95%% in 3.4014 secs
+  99%% in 3.7027 secs
 
-Happy Learning!  
-— Team **School of DevOps**
+Details (average, fastest, slowest):
+  DNS+dialup:   0.0005 secs, 0.0000 secs, 0.0178 secs
+  DNS-lookup:   0.0002 secs, 0.0000 secs, 0.0059 secs
+  req write:    0.0000 secs, 0.0000 secs, 0.0155 secs
+  resp wait:    2.3569 secs, 0.0040 secs, 3.8929 secs
+  resp read:    0.0008 secs, 0.0000 secs, 0.0946 secs
+
+Status code distribution:
+  [200] 5000 responses
+```
+- Run a load test with an interval of 3 minitues
+```
+hey -z 3m -c 200 -m POST \
+-H "Content-Type: application/json" \
+-D deployment/charts/monitoring/predict.json \
+http://localhost:30100/predict
+```
+- Sample Output
+```
+Summary:
+  Total:        184.5604 secs
+  Slowest:      4.7011 secs
+  Fastest:      0.0994 secs
+  Average:      2.4146 secs
+  Requests/sec: 81.5235
+  
+  Total data:   2181670 bytes
+  Size/request: 145 bytes
+
+Response time histogram:
+  0.099 [1]     |
+  0.560 [16]    |
+  1.020 [39]    |
+  1.480 [39]    |
+  1.940 [91]    |
+  2.400 [7366]  |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  2.860 [6680]  |■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■
+  3.321 [705]   |■■■■
+  3.781 [86]    |
+  4.241 [7]     |
+  4.701 [16]    |
+
+
+Latency distribution:
+  10%% in 2.1033 secs
+  25%% in 2.2967 secs
+  50%% in 2.4001 secs
+  75%% in 2.5052 secs
+  90%% in 2.7023 secs
+  95%% in 2.8960 secs
+  99%% in 3.2926 secs
+
+Details (average, fastest, slowest):
+  DNS+dialup:   0.0003 secs, 0.0000 secs, 0.0478 secs
+  DNS-lookup:   0.0000 secs, 0.0000 secs, 0.0047 secs
+  req write:    0.0000 secs, 0.0000 secs, 0.0041 secs
+  resp wait:    2.4135 secs, 0.0714 secs, 4.7010 secs
+  resp read:    0.0007 secs, 0.0000 secs, 0.1367 secs
+
+Status code distribution:
+  [200] 15046 responses
+```

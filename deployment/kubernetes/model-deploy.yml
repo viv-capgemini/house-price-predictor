@@ -6,7 +6,7 @@ metadata:
   name: model
   namespace: house-price-predictor
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: model
@@ -17,9 +17,16 @@ spec:
         app: model
     spec:
       containers:
-      - image: voa2000/streamlit:latest
+      - image: voa2000/house-price-model:metricsfix
+        imagePullPolicy: IfNotPresent
         name: house-price-model
         ports:
-        - containerPort: 8501
-        resources: {}
+        - containerPort: 8000
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
 status: {}

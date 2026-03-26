@@ -1,26 +1,32 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
   labels:
     app: streamlit
   name: streamlit
+  namespace: house-price-predictor
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: streamlit
   strategy: {}
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: streamlit
     spec:
       containers:
-      - image: voa2000/streamlit:dev
+      - image: voa2000/streamlit:latest
+        imagePullPolicy: Always
         name: streamlit
         ports:
         - containerPort: 8501
-        resources: {}
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
 status: {}

@@ -1,11 +1,9 @@
-version: '3.8'
-
 services:
   model:
     image: voa2000/house-price-model:dev 
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: src/api/Dockerfile
     ports:
       - "8002:8000"
     container_name: model-app

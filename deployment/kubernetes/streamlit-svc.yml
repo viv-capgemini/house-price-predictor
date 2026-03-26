@@ -4,6 +4,7 @@ metadata:
   labels:
     app: streamlit
   name: streamlit
+  namespace: house-price-predictor
 spec:
   ports:
   - name: "8501"
