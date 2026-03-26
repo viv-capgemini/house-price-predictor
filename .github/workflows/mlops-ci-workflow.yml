@@ -85,6 +85,6 @@ jobs:
       uses: docker/build-push-action@v2
       with:
           context: .
-          file: ./Dockerfile
+          file: ./src/api/Dockerfile
           push: true
           tags: voa2000/fastapi:${{ github.sha }}
