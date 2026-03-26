@@ -17,8 +17,8 @@ spec:
         app: model
     spec:
       containers:
-      - image: voa2000/house-price-model:metricsfix
-        imagePullPolicy: IfNotPresent
+      - image: voa2000/house-price-model:latest
+        imagePullPolicy: Always
         name: house-price-model
         ports:
         - containerPort: 8000
