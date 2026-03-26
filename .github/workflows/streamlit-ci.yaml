@@ -1,8 +1,9 @@
-name: Streamlit CI
+name: Streamlit CI Pipeline
 on:
   push:
     paths:
       - 'streamlit_app/**'
+      - .github/workflows/streamlit-ci.yml
   workflow_dispatch:
 
 jobs:
