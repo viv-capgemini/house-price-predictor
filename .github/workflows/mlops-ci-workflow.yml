@@ -87,4 +87,6 @@ jobs:
           context: .
           file: ./src/api/Dockerfile
           push: true
-          tags: voa2000/fastapi:${{ github.sha }}
+          tags: |
+            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:latest
+            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:${{ github.sha }}
