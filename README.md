@@ -182,21 +182,7 @@ Streamlit endpoint http://localhost:30000/
 ## With Kubernates
 - using KIND -https://kubernetes-tutorial.schoolofdevops.com/adv_kubernetes-setup/#
 
-## Deploying Prometheus
-```
-helm upgrade --install prometheus \
-  -n monitoring \
-  --create-namespace \
-  prometheus-community/kube-prometheus-stack \
-  -f deployment/charts/monitoring/values.yml
-```
-- status of endpoint can be found here - http://localhost:30300/targets
-- Get password with `kubectl get secret --namespace monitoring -l app.kubernetes.io/component=admin-secret -o jsonpath="{.items[0].data.admin-password}" | base64 --decode ; echo`
-## Metrics you can scrape from promethus
-- http_requests_total
-- histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[1m]))
-by (le, handler))
-- rate(http_request_size_bytes_sum[1m])
+
 ## Kubernates Auto scalers with KEDA
 - Installing KEDA via HELM 
 ```
