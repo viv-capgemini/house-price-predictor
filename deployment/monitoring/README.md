@@ -1,8 +1,28 @@
 # Monitoring Deployment Code
 Monitoring with Prometheus uses a Helm chart so that needs to be installed before hand
+Installing Helm
+To install helm version 3 on Linux or MacOS, you can follow following instructions.
+```
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 |
+bash
+You could further refer to [Official HELM Install Instructions]() for alternative options.
+Verify the installtion is successful,
+```
+```
+helm --help
+helm version
+```
+Deploy Prometheus Stack with HELM
+Read about [kube-prometheus-stack 33.1.0 · prometheus/prometheus-community]() chart at
+artifacthub.io
+Add helm repository using ,
+```
+helm repo add prometheus-community https://prometheus-community.github.io/
+helm-charts
+helm repo update
+```
 
-
-## Deploying Prometheus
+## Install the helm chart to setup Prometheus and Grafana
 ```
 helm upgrade --install prometheus \
   -n monitoring \
