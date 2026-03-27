@@ -1,6 +1,6 @@
 services:
   model:
-    image: voa2000/house-price-model:dev 
+    image: voa2000/house-price-model:latest 
     build:
       context: .
       dockerfile: src/api/Dockerfile
@@ -11,7 +11,7 @@ services:
       - house-price-network
 
   streamlit:
-    image: voa2000/streamlit:dev 
+    image: voa2000/streamlit:latest
     build:
       context: ./streamlit_app
       dockerfile: Dockerfile
