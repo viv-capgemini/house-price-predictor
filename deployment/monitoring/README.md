@@ -37,3 +37,4 @@ helm upgrade --install prometheus \
 - histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[1m]))
 by (le, handler))
 - rate(http_request_size_bytes_sum[1m])
+
