@@ -38,5 +38,7 @@ dist/
 *.egg-info/
 
 # Ignore all .pkl files (models, preprocessors, etc.)
-# *.pkl
+*.pkl
 
+# Streamlit specific ignores
+#
