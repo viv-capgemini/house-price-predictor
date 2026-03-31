@@ -136,6 +136,12 @@ Train your model and log everything to MLflow:
 
 ```bash
 python src/models/train_model.py   --config configs/model_config.yaml   --data data/processed/featured_house_data.csv   --models-dir models/trained   --mlflow-tracking-uri http://localhost:5555
+
+python src/models/train_model.py \
+  --config configs/model_config.yaml \
+  --data data/processed/featured_house_data.csv \
+  --models-dir models \
+  --mlflow-tracking-uri http://localhost:5555
 ```
 
 ---

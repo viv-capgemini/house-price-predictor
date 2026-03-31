@@ -2,16 +2,16 @@ model:
   best_model: GradientBoosting
   feature_sets:
     rfe:
-      - '0'
-      - '1'
-      - '2'
-      - '3'
-      - '4'
-      - '5'
-      - '9'
-      - '10'
-      - '13'
-      - '14'
+    - '0'
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '9'
+    - '10'
+    - '13'
+    - '14'
   mae: 10779.276234760313
   name: house_price_model
   parameters:
@@ -37,4 +37,4 @@ model:
     verbose: 0
     warm_start: false
   r2_score: 0.9938456172530279
-  target: price
+  target_variable: price

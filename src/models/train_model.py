@@ -1,5 +1,4 @@
 import argparse
-import os
 import pandas as pd
 import numpy as np
 import joblib
@@ -62,11 +61,7 @@ def main(args):
 
     # Load data
     data = pd.read_csv(args.data)
-    target = model_cfg.get('target_variable') or model_cfg.get('target')
-    if not target:
-        raise KeyError(
-            "Missing target variable in config. Please set 'model.target_variable' or 'model.target'."
-        )
+    target = model_cfg['target_variable']
 
     # Use all features except the target variable
     X = data.drop(columns=[target])
@@ -150,7 +145,6 @@ def main(args):
 
         # Save model locally
         save_path = f"{args.models_dir}/trained/{model_name}.pkl"
-        os.makedirs(os.path.dirname(save_path), exist_ok=True)
         joblib.dump(model, save_path)
         logger.info(f"Saved trained model to: {save_path}")
         logger.info(f"Final MAE: {mae:.2f}, R²: {r2:.4f}")

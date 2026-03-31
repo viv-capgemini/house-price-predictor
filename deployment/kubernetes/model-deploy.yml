@@ -16,7 +16,7 @@ spec:
         app: model
     spec:
       containers:
-      - image: voa2000/house-price-model:v1.0.1
+      - image: voa2000/house-price-model:v1.0.2
         imagePullPolicy: Always
         name: house-price-model
         ports:
