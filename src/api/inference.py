@@ -13,21 +13,34 @@ try:
 except Exception as e:
     raise RuntimeError(f"Error loading model or preprocessor: {str(e)}")
 
+
+def _to_model_input_frame(processed_features):
+    """Ensure model input retains feature names expected by sklearn estimators."""
+    if hasattr(processed_features, "toarray"):
+        processed_features = processed_features.toarray()
+
+    if hasattr(model, "feature_names_in_"):
+        return pd.DataFrame(processed_features, columns=model.feature_names_in_)
+
+    return pd.DataFrame(processed_features)
+
+
 def predict_price(request: HousePredictionRequest) -> PredictionResponse:
     """
     Predict house price based on input features.
     """
     # Prepare input data
     input_data = pd.DataFrame([request.dict()])
-    input_data['house_age'] = datetime.now().year - input_data['year_built']
-    input_data['bed_bath_ratio'] = input_data['bedrooms'] / input_data['bathrooms']
-    input_data['price_per_sqft'] = 0  # Dummy value for compatibility
+    input_data["house_age"] = datetime.now().year - input_data["year_built"]
+    input_data["bed_bath_ratio"] = input_data["bedrooms"] / input_data["bathrooms"]
+    input_data["price_per_sqft"] = 0  # Dummy value for compatibility
 
     # Preprocess input data
     processed_features = preprocessor.transform(input_data)
+    model_input = _to_model_input_frame(processed_features)
 
     # Make prediction
-    predicted_price = model.predict(processed_features)[0]
+    predicted_price = model.predict(model_input)[0]
 
     # Convert numpy.float32 to Python float and round to 2 decimal places
     predicted_price = round(float(predicted_price), 2)
@@ -42,21 +55,23 @@ def predict_price(request: HousePredictionRequest) -> PredictionResponse:
         predicted_price=predicted_price,
         confidence_interval=confidence_interval,
         features_importance={},
-        prediction_time=datetime.now().isoformat()
+        prediction_time=datetime.now().isoformat(),
     )
+
 
 def batch_predict(requests: list[HousePredictionRequest]) -> list[float]:
     """
     Perform batch predictions.
     """
     input_data = pd.DataFrame([req.dict() for req in requests])
-    input_data['house_age'] = datetime.now().year - input_data['year_built']
-    input_data['bed_bath_ratio'] = input_data['bedrooms'] / input_data['bathrooms']
-    input_data['price_per_sqft'] = 0  # Dummy value for compatibility
+    input_data["house_age"] = datetime.now().year - input_data["year_built"]
+    input_data["bed_bath_ratio"] = input_data["bedrooms"] / input_data["bathrooms"]
+    input_data["price_per_sqft"] = 0  # Dummy value for compatibility
 
     # Preprocess input data
     processed_features = preprocessor.transform(input_data)
+    model_input = _to_model_input_frame(processed_features)
 
     # Make predictions
-    predictions = model.predict(processed_features)
+    predictions = model.predict(model_input)
     return predictions.tolist()
