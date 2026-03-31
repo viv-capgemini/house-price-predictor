@@ -33,7 +33,3 @@ helm upgrade --install prometheus \
 - histogram_quantile(0.95, sum(rate(http_request_duration_seconds_bucket[1m]))
 by (le, handler))
 - rate(http_request_size_bytes_sum[1m])
-# Display Notes after installation
-- helm get notes prometheus -n monitoring
-# Get password
-kubectl get secret --namespace monitoring -l app.kubernetes.io/component=admin-secret -o jsonpath="{.items[0].data.admin-password}" | base64 --decode ; echo        
