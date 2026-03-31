@@ -2,7 +2,11 @@ name: MLOps Model Training Pipeline
 
 on:
   push:
-    branches: [ main]
+    paths:
+      - 'src/**'
+      - 'configs/**' 
+      - .github/workflows/mlops-pipeline.yml
+  workflow_dispatch:
 jobs:
   data-processing:
     runs-on: ubuntu-latest
