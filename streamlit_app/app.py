@@ -183,7 +183,7 @@ with col2:
         pred = st.session_state.prediction
 
         # Format the predicted price
-        formatted_price = "${:,.0f}".format(pred["predicted_price"])
+        formatted_price = "£{:,.0f}".format(pred["predicted_price"])
         st.markdown(
             f'<div class="prediction-value">{formatted_price}</div>',
             unsafe_allow_html=True,
@@ -210,8 +210,8 @@ with col2:
         with col_c:
             st.markdown('<div class="info-card">', unsafe_allow_html=True)
             st.markdown('<p class="info-label">Price Range</p>', unsafe_allow_html=True)
-            lower = "${:,.1f}".format(pred["confidence_interval"][0])
-            upper = "${:,.1f}".format(pred["confidence_interval"][1])
+            lower = "£{:,.1f}".format(pred["confidence_interval"][0])
+            upper = "£{:,.1f}".format(pred["confidence_interval"][1])
             st.markdown(
                 f'<p class="info-value">{lower} - {upper}</p>', unsafe_allow_html=True
             )
