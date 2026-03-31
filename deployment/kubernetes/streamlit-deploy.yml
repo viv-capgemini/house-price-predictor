@@ -4,7 +4,6 @@ metadata:
   labels:
     app: streamlit
   name: streamlit
-  namespace: house-price-predictor
 spec:
   replicas: 1
   selector:

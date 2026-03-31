@@ -4,7 +4,6 @@ metadata:
   labels:
     app: model
   name: model
-  namespace: house-price-predictor
 spec:
   replicas: 1
   selector:

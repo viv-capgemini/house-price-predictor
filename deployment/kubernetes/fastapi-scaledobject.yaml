@@ -2,7 +2,6 @@ apiVersion: keda.sh/v1alpha1
 kind: ScaledObject
 metadata:
   name: fastapi-latency-autoscaler
-  namespace: house-price-predictor
 spec:
   scaleTargetRef:
     name: model
@@ -27,5 +26,5 @@ spec:
         threshold: "20"
     - type: cpu
       metadata:
-        metricType: Utilization # Allowed types are 'Utilization' or 'Value'
+        type: Utilization
         value: "50"
