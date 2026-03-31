@@ -195,12 +195,14 @@ helm install keda kedacore/keda \
 - Validate - `kubectl get all -n keda`
 - keda
 ## Load Test with Hey
-- installation of hey on mack ```brew install hey```
+- installation of hey on mac ```brew install hey```
+- Install on Linux 
+``` sudo apt install snap && sudo snap install hey```
 - Make a prediction
 ```
 curl -X POST http://localhost:30100/predict \
 -H "Content-Type: application/json" \
--d @deployment/charts/monitoring/predict.json
+-d @deployment/monitoring/predict.json
 ```
 - Results
 ```
@@ -210,7 +212,7 @@ curl -X POST http://localhost:30100/predict \
 ```
 hey -n 5000 -c 200 -m POST \
 -H "Content-Type: application/json" \
--D deployment/charts/monitoring/predict.json \
+-D deployment/monitoring/predict.json \
 http://localhost:30100/predict
 ```
 - Sample output
@@ -262,7 +264,7 @@ Status code distribution:
 ```
 hey -z 3m -c 200 -m POST \
 -H "Content-Type: application/json" \
--D deployment/charts/monitoring/predict.json \
+-D deployment/monitoring/predict.json \
 http://localhost:30100/predict
 ```
 - Sample Output

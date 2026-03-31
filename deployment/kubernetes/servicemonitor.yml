@@ -2,7 +2,6 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: house-price-api-monitor
-  namespace: house-price-predictor
   labels:
     release: prometheus
 spec:
@@ -11,7 +10,7 @@ spec:
       app: model
   namespaceSelector:
     matchNames:
-      - house-price-predictor
+      - default
   endpoints:
     - port: http
       path: /metrics
