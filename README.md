@@ -48,6 +48,15 @@ To begin, ensure the following tools are installed on your system:
 
 ## 🚀 Preparing Your Environment
 
+**Build a KIND cluster:**
+  ```
+  git clone https://github.com/initcron/k8s-code.git
+  cd k8s-code/helper/kind/
+  kind create cluster --config kind-three-node-cluster.yaml
+  kubectl cluster-info --context kind-kind
+  kubectl get nodes
+  ```
+
 1. **Fork this repo** on GitHub.
 
 2. **Clone your forked copy:**
@@ -58,19 +67,14 @@ To begin, ensure the following tools are installed on your system:
    ```
 
 3. **Setup Python Virtual Environment using UV:**
+  - Install on Ubuntu curl -LsSf https://astral.sh/uv/install.sh | sh
+  - uv --version
 
    ```bash
    uv venv --python python3.11
    source .venv/bin/activate
    ```
-4. **Build a KIND cluster:**
-  ```
-  git clone https://github.com/initcron/k8s-code.git
-  cd k8s-code/helper/kind/
-  kind create cluster --config kind-three-node-cluster.yaml
-  kubectl cluster-info --context kind-kind
-  kubectl get nodes
-  ```
+
 4. **Install dependencies:**
 
    ```bash
@@ -84,8 +88,8 @@ To track experiments and model runs:
 
 ```bash
 cd deployment/mlflow
-docker compose -f mlflow-docker-compose.yml up -d
-docker compose ps
+docker-compose up -d
+docker-compose ps
 ```
 
 Access the MLflow UI at [http://localhost:5555](http://localhost:5555)
@@ -140,9 +144,7 @@ python src/models/train_model.py   --config configs/model_config.yaml   --data d
 
 The code for both the apps are available in `src/api` and `streamlit_app` already. To build and launch these apps 
 
-  * Add a  `Dockerfile` in the root of the source code for building FastAPI  
-  * Add `streamlit_app/Dockerfile` to package and build the Streamlit app  
-  * Add `docker-compose.yaml` in the root path to launch both these apps. be sure to provide `API_URL=http://fastapi:8000` in the streamlit app's environment. 
+Set API_URL=http://localhost:8000` in the streamlit app's environment. 
 
 
 Once you have launched both the apps, you should be able to access streamlit web ui and make predictions. 
@@ -175,13 +177,9 @@ In this project you'll learn how to:
 - Automate training workflows using GitHub Actions or Argo Workflows
 - Apply DevOps principles to Machine Learning systems
 ## 🧠 Application Endpoints
-Kubernates deployment ` `
+Helm deployment location
 API endpoint in kubernates http://localhost:30100/docs#/
 Streamlit endpoint http://localhost:30000/
-
-## With Kubernates
-- using KIND -https://kubernetes-tutorial.schoolofdevops.com/adv_kubernetes-setup/#
-
 
 ## Kubernates Auto scalers with KEDA
 - Installing KEDA via HELM 
@@ -194,6 +192,7 @@ helm install keda kedacore/keda \
 ```
 - Validate - `kubectl get all -n keda`
 - keda
+
 ## Load Test with Hey
 - installation of hey on mac ```brew install hey```
 - Install on Linux 
