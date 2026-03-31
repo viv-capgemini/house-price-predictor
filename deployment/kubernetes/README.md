@@ -53,7 +53,7 @@ curl -X POST http://localhost:30100/predict \
 ```
 hey -n 5000 -c 200 -m POST \
 -H "Content-Type: application/json" \
--D deployment/charts/monitoring/predict.json \
+-D deployment/monitoring/predict.json \
 http://localhost:30100/predict
 ```
 - Sample output
