@@ -16,7 +16,7 @@ spec:
         app: streamlit
     spec:
       containers:
-      - image: voa2000/streamlit:latest
+      - image: voa2000/streamlit:v1.0.1
         imagePullPolicy: Always
         name: streamlit
         ports:
