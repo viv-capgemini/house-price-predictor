@@ -26,5 +26,5 @@ spec:
         threshold: "20"
     - type: cpu
       metadata:
-        type: Utilization
-        value: "50"
+        metricType: Utilization
+        value: "70"
