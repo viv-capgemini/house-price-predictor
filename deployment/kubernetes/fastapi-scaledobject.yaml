@@ -12,7 +12,7 @@ spec:
   triggers:
     - type: prometheus
       metadata:
-        serverAddress: http://prom-kube-prometheus-stack-prometheus.monitoring.svc:9090
+        serverAddress: http://prometheus-kube-prometheus-prometheus.monitoring.svc:9090
         metricName: fastapi_latency_p95
         query: |
           histogram_quantile(0.95,
@@ -20,7 +20,7 @@ spec:
         threshold: "0.08"
     - type: prometheus
       metadata:
-        serverAddress: http://prom-kube-prometheus-stack-prometheus.monitoring.svc:9090
+        serverAddress: http://prometheus-kube-prometheus-prometheus.monitoring.svc:9090
         metricName: request_rate
         query: sum(rate(http_requests_total[1m]))
         threshold: "20"
