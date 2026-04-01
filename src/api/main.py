@@ -21,7 +21,7 @@ app = FastAPI(
         "This application is part of the MLOps project demonstration. "
         "Edited by Vivienne Ansah."
     ),
-    version="2.0.2",
+    version="1.0.2",
     contact={
         "name": "Vivienne Ansah",
     },

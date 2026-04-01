@@ -39,3 +39,17 @@ kubectl delete -n argocd -f kubectl apply -k https://github.com/argoproj/argo-cd
 argocd repo add https://github.com/viv-capgemini/house-price-predictor.git
 kubectl apply -f deployment/argocd/house-price-predictor-app.yaml -n argocd\n
 argocd app get house-price-predictor\n
+
+### Install MetalLB
+
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.5/config/manifests/metallb-native.yaml
+
+kubectl -n metallb-system get pods
+
+kubectl apply -f metallb-pool.yaml
+
+
+kubectl -n argocd patch svc argocd-server \
+  -p '{"spec": {"type": "LoadBalancer"}}'
+
+kubectl -n argocd get svc argocd-server
