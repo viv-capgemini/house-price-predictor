@@ -30,26 +30,20 @@ Argo CD UI (HTTPS): https://localhost:32443
 ### Auto scaling
 
 kubectl apply --server-side -f https://github.com/kedacore/keda/releases/download/v2.19.0/keda-2.19.0-core.yaml
-### Remove ARGOCD
+### Install Argocd CLI
 
-kubectl delete -n argocd -f kubectl apply -k https://github.com/argoproj/argo-cd/manifests/crds\?ref\=stableyaml --ignore-not-found=true && kubectl delete namespace argocd --ignore-not-found=true
+sudo curl -sSL -o /usr/local/bin/argocd \
+  https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
 
-###
+sudo chmod +x /usr/local/bin/argocd
+
+
+### Login and apply deployment
+
+argocd login 192.168.0.217:32400 --username admin --password NEWPASSWORD --insecure
 
 argocd repo add https://github.com/viv-capgemini/house-price-predictor.git
 kubectl apply -f deployment/argocd/house-price-predictor-app.yaml -n argocd\n
 argocd app get house-price-predictor\n
-
-### Install MetalLB
-
-kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.14.5/config/manifests/metallb-native.yaml
-
-kubectl -n metallb-system get pods
-
-kubectl apply -f metallb-pool.yaml
-
-
-kubectl -n argocd patch svc argocd-server \
-  -p '{"spec": {"type": "LoadBalancer"}}'
 
 kubectl -n argocd get svc argocd-server
