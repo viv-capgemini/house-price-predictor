@@ -25,6 +25,6 @@ spec:
         query: sum(rate(http_requests_total[1m]))
         threshold: "20"
     - type: cpu
+      metricType: Utilization
       metadata:
-        metricType: Utilization
         value: "70"
