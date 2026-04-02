@@ -4,9 +4,11 @@ Welcome to the **House Price Predictor** project! This is a real-world, end-to-e
 
 You'll start from raw data and move through data preprocessing, feature engineering, experimentation, model tracking with MLflow, and optionally using Jupyter for exploration – all while applying industry-grade tooling.
 
-> 🚀 **Want to master MLOps from scratch?**  
-Check out the [MLOps Bootcamp at School of DevOps](https://schoolofdevops.com) to level up your skills.
+We finalise it with GitHub Actions to perform the above, create a model with FastAPI and save to dockerhub.
 
+The API is wrapped around Stremlit.
+Streamlit is the frontend of your machine‑learning system.
+It’s the part that real users interact with.
 ---
 
 ## 📦 Project Structure
@@ -21,7 +23,6 @@ house-price-predictor/
 │   └── charts/
 |        ├── prometheus
 |        ├── house-price-model
-|        ├──
 |         
 ├── models/                      # Trained models and preprocessors
 ├── notebooks/                   # Optional Jupyter notebooks for experimentation
@@ -43,7 +44,6 @@ To begin, ensure the following tools are installed on your system:
 - [Visual Studio Code](https://code.visualstudio.com/) or your preferred editor
 - [UV – Python package and environment manager](https://github.com/astral-sh/uv)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) 
-
 ---
 
 ## 🚀 Preparing Your Environment
@@ -117,7 +117,6 @@ Clean and preprocess the raw housing dataset:
 ```bash
 python src/data/run_processing.py   --input data/raw/house_data.csv   --output data/processed/cleaned_house_data.csv
 ```
-
 ---
 
 ### 🧠 Step 2: Feature Engineering
@@ -151,7 +150,6 @@ python src/models/train_model.py \
 The code for both the apps are available in `src/api` and `streamlit_app` already. To build and launch these apps 
 
 Set API_URL=http://localhost:8000` in the streamlit app's environment. 
-
 
 Once you have launched both the apps, you should be able to access streamlit web ui and make predictions. 
 
