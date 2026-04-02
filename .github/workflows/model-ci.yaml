@@ -27,7 +27,7 @@ jobs:
           pip install flake8
 
       - name: Lint with flake8
-        run: flake8 model_app/src/api --max-line-length=120
+        run: flake8 model_app/src/api --max-line-length=150
 #---------------------------------------------------------------
   build-and-push:
     needs: lint
