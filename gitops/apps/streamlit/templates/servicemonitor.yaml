@@ -1,0 +1,16 @@
+{{- if .Values.prometheus.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: streamlit-monitor
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: {{ include "streamlit.name" . }}
+  endpoints:
+    - port: metrics
+      path: /metrics
+      interval: 10s
+{{- end }}
