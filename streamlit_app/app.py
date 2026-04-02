@@ -246,13 +246,20 @@ with col2:
     else:
         # Display placeholder message
         st.markdown(
-            """
-        <div style="display: flex; height: 300px; align-items: center; justify-content: center; color: #6b7280; text-align: center;">
-            Fill out the form and click "Predict Price" to see the estimated house price.
-        </div>
+        """
+            <div style="
+                display: flex;
+                height: 300px;
+                align-items: center;
+                justify-content: center;
+                color: #6b7280;
+                text-align: center;
+            ">
+                Fill out the form and click "Predict Price" to see the estimated house price.
+            </div>
         """,
-            unsafe_allow_html=True,
-        )
+    unsafe_allow_html=True,
+)
 
     st.markdown("</div>", unsafe_allow_html=True)
 
