@@ -38,16 +38,17 @@ jobs:
             max_depth: 20
             random_state: 42
         EOF
+  feature-engineering:
+    needs: Initial-Setup
+    runs-on: ubuntu-latest
+    steps:
 
     - name: Process data
       run: |
         python model_app/src/data-processing/run_processing.py \
           --input data/raw/house_data.csv \
           --output data/processed/cleaned_house_data.csv
-  feature-engineering:
-    needs: Initial-Setup
-    runs-on: ubuntu-latest
-    steps:
+
     - name: Engineer features
       run: |
         mkdir -p models/trained
