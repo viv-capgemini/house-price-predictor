@@ -15,7 +15,7 @@ class HousePredictionRequest(BaseModel):
 
 
 class PredictionResponse(BaseModel):
-    predicted_price: float
-    confidence_interval: List[float]
-    features_importance: dict
-    prediction_time: str
+     predicted_price: float
+     confidence_interval: List[float]
+     features_importance: dict
+     prediction_time: str
