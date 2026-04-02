@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from inference import predict_price, batch_predict
 from schemas import HousePredictionRequest, PredictionResponse
-from prometheus_fastapi_instrumentator import Instrumentator # type: ignore # For Prometheus monitoring
+from prometheus_fastapi_instrumentator import Instrumentator  # type: ignore # For Prometheus monitoring
 from prometheus_client import start_http_server
 import threading
 from fastapi.responses import JSONResponse
@@ -10,7 +10,7 @@ import time
 import socket
 import os
 import psutil
-import prometheus_client # type: ignore
+import prometheus_client  # type: ignore
 from typing import Dict, Any
 
 # Initialize FastAPI app with metadata
@@ -32,9 +32,11 @@ app = FastAPI(
 )
 start_time = time.time()
 
+
 # Start Prometheus metrics server on port 9100 in a background thread
 def start_metrics_server():
     start_http_server(9100)
+
 
 # Start the metrics server in a separate thread
 metrics_thread = threading.Thread(target=start_metrics_server)
@@ -47,6 +49,7 @@ MODEL_VERSION = "v12"
 MODEL_LOADED = True
 MODEL_INFERENCE_TIME_MS = 14  # example static value
 
+
 # Example dependency checks
 def check_redis():
     try:
@@ -55,6 +58,7 @@ def check_redis():
     except Exception:
         return {"status": "down"}
 
+
 def check_postgres():
     try:
         # run a lightweight SELECT 1
@@ -62,12 +66,14 @@ def check_postgres():
     except Exception:
         return {"status": "down"}
 
+
 def get_prom_metric(metric_name: str):
     try:
         metric = prometheus_client.REGISTRY.get_sample_value(metric_name)
         return metric
     except Exception:
         return None
+
 
 # Add CORS middleware
 app.add_middleware(
@@ -79,6 +85,7 @@ app.add_middleware(
 )
 # Initialize and instrument Prometheus metrics
 Instrumentator().instrument(app).expose(app)
+
 
 # Health check endpoint
 @app.get("/health")
@@ -99,7 +106,9 @@ async def health() -> JSONResponse:
     system_info = {
         "cpu_usage_percent": psutil.cpu_percent(interval=0.1),
         "memory_usage_percent": psutil.virtual_memory().percent,
-        "open_file_descriptors": process.num_fds() if hasattr(process, "num_fds") else None,
+        "open_file_descriptors": process.num_fds()
+        if hasattr(process, "num_fds")
+        else None,
         "thread_count": process.num_threads(),
     }
 
@@ -139,10 +148,12 @@ async def health() -> JSONResponse:
 
     return JSONResponse(content=response)
 
+
 # Prediction endpoint
 @app.post("/predict", response_model=PredictionResponse)
 async def predict(request: HousePredictionRequest):
     return predict_price(request)
+
 
 # Batch prediction endpoint
 @app.post("/batch-predict", response_model=list)

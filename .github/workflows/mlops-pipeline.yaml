@@ -3,9 +3,9 @@ name: MLOps Model Training Pipeline
 on:
   push:
     paths:
-      - 'src/**'
+      - 'model_app/**'
       - 'configs/**' 
-      - .github/workflows/mlops-pipeline.yml
+      - .github/workflows/mlops-pipeline.yaml
   workflow_dispatch:
 jobs:
   data-processing:
@@ -41,13 +41,14 @@ jobs:
 
     - name: Process data
       run: |
-        python src/data/run_processing.py \
+        python model_app/src/data-processing/run_processing.py \
           --input data/raw/house_data.csv \
           --output data/processed/cleaned_house_data.csv
 
     - name: Engineer features
       run: |
-        python src/features/engineer.py \
+        mkdir -p models/trained
+        python model_app/src/feature-engineering/run_engineer.py \
           --input data/processed/cleaned_house_data.csv \
           --output data/processed/featured_house_data.csv \
           --preprocessor models/trained/preprocessor.pkl
@@ -105,7 +106,7 @@ jobs:
     - name: Train model
       run: |
         mkdir -p models
-        python src/models/train_model.py \
+        python model_app/src/model-training/train_model.py \
           --config configs/model_config.yaml \
           --data data/processed/featured_house_data.csv \
           --models-dir models \
@@ -121,58 +122,3 @@ jobs:
       run: |
         docker stop mlflow-server || true
         docker rm mlflow-server || true
-#---------------------------------------------------------------
-  build-and-publish:
-    needs: model-training
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    - name: Download trained model
-      uses: actions/download-artifact@v4
-      with:
-        name: trained-model
-        path: models/
-
-    - name: Download preprocessor
-      uses: actions/download-artifact@v4
-      with:
-        name: preprocessor
-        path: models/trained/
-    
-    - name: Login to Docker Hub
-      uses: docker/login-action@v4
-      with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-    - name: Set short SHA
-      run: echo "SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
-
-    - name: Extract version
-      run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-
-    - name: Login to Docker Hub
-      uses: docker/login-action@v3
-      with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-    - name: Set up QEMU
-      uses: docker/setup-qemu-action@v3
-      
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
-    
-    - name: Build and push API image (amd64 + arm64)
-      uses: docker/build-push-action@v6
-      with:
-          context: .
-          file: ./src/api/Dockerfile
-          platforms: linux/amd64,linux/arm64
-          push: true
-          tags: |
-            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:latest
-            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/house-price-model:v1.0.3
