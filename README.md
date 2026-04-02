@@ -15,22 +15,31 @@ It’s the part that real users interact with.
 
 ```
 house-price-predictor/
+|── .github/workflows/
+|    |── mlops-pipeline.yaml     # Pipeline to train,build,test model and update Helm
+|    |── streamlit-ci.yaml       # Pipeline build and test streamlit app and update Helm
 ├── configs/                     # YAML-based configuration for models
 ├── data/                        # Raw and processed datasets
 ├── deployment/
 |   ├── kubernetes/              # Kubernetes manifest files
 |   ├── mlflow/                  # Docker Compose setup for MLflow 
-│   └── charts/
-|        ├── prometheus
-|        ├── house-price-model
-|         
+│   └── monitoring/              # Values file for deploying Helm chart
+|── gitops/
+|   |── apps\
+|   |   |── model                # Helm Chart for deploying Model
+|   |   |── streamlit            # Helm Chart for deploying streamlit
+|   |── argocd                   # Manifest to deploy to argocd
+|        
 ├── models/                      # Trained models and preprocessors
 ├── notebooks/                   # Optional Jupyter notebooks for experimentation
 ├── src/
+|   |── src
+|   |   |── api                  # API Application 
 │   ├── data/                    # Data cleaning and preprocessing scripts
 │   ├── features/                # Feature engineering pipeline
 │   ├── models/                  # Model training and evaluation
 ├── requirements.txt             # Python dependencies
+|── streamlit_app                # Streamlit Application
 └── README.md                    # You’re here!
 ```
 ---
