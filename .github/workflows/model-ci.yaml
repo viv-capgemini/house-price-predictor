@@ -72,16 +72,13 @@ jobs:
 #---------------------------------------------------------------
   update-gitops:
     needs: build-and-push
-    env:
-      GH_PAT: ${{ secrets.GH_PAT }}
-    if: env.GH_PAT != ''
     runs-on: ubuntu-latest
     steps:
       - name: Checkout GitOps repo
         uses: actions/checkout@v5
         with:
           repository: ${{ secrets.DOCKERHUB_USERNAME }}/model
-          token: ${{ env.GH_PAT }}
+          token: ${{ secrets.GH_PAT }}
           path: gitops
 
       - name: Update Model Helm chart values.yaml with tag
