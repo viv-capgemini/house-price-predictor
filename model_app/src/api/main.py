@@ -11,7 +11,7 @@ import socket
 import os
 import psutil
 import prometheus_client  # type: ignore
-from typing import Dict, Any
+from typing import Dict
 
 # Initialize FastAPI app with metadata
 app = FastAPI(
