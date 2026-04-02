@@ -1,4 +1,4 @@
-name: MLOps Model Training Pipeline
+name: MLOps Model Training Pipeline with MLflow
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
       - .github/workflows/mlops-pipeline.yaml
   workflow_dispatch:
 jobs:
-  data-processing:
+  Initial-Setup:
     runs-on: ubuntu-latest
 
     steps:
@@ -44,7 +44,10 @@ jobs:
         python model_app/src/data-processing/run_processing.py \
           --input data/raw/house_data.csv \
           --output data/processed/cleaned_house_data.csv
-
+  feature-engineering:
+    needs: Initial-Setup
+    runs-on: ubuntu-latest
+    steps:
     - name: Engineer features
       run: |
         mkdir -p models/trained
@@ -66,7 +69,7 @@ jobs:
         path: models/trained/preprocessor.pkl
 #---------------------------------------------------------------
   model-training:
-    needs: data-processing
+    needs: feature-engineering
     runs-on: ubuntu-latest
 
     steps:
