@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from inference import predict_price, batch_predict
@@ -11,7 +12,6 @@ import socket
 import os
 import psutil
 import prometheus_client  # type: ignore
-from typing import Dict
 
 # Initialize FastAPI app with metadata
 app = FastAPI(
@@ -156,6 +156,6 @@ async def predict(request: HousePredictionRequest):
 
 
 # Batch prediction endpoint
-@app.post("/batch-predict", response_model=list)
-async def batch_predict_endpoint(requests: list[HousePredictionRequest]):
+@app.post("/batch-predict", response_model=List[PredictionResponse])
+async def batch_predict_endpoint(requests: List[HousePredictionRequest]):
     return batch_predict(requests)
