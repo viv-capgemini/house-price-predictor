@@ -74,7 +74,7 @@ jobs:
           push: true
           tags: |
             docker.io/${{ secrets.DOCKERHUB_USERNAME }}/hpp-streamlit:latest
-            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/streamlit:${{ steps.tag.outputs.new_tag }}
+            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/hpp-streamlit:${{ steps.tag.outputs.new_tag }}
 #---------------------------------------------------------------
   update-gitops:
     needs: build-and-push

@@ -68,7 +68,7 @@ jobs:
           push: true
           tags: |
             docker.io/${{ secrets.DOCKERHUB_USERNAME }}/hpp-model:latest
-            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/model:${{ steps.tag.outputs.new_tag }}
+            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/hpp-model:${{ steps.tag.outputs.new_tag }}
 #---------------------------------------------------------------
   update-gitops:
     needs: build-and-push
