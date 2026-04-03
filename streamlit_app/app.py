@@ -73,7 +73,7 @@ with col1:
 
     # Square Footage slider
     st.markdown(
-        f"<p><strong>Square Footage:</strong> <span id='sqft-value'></span></p>",
+        "<p><strong>Square Footage:</strong> <span id='sqft-value'></span></p>",
         unsafe_allow_html=True,
     )
     sqft = st.slider("", 500, 5000, 1500, 50, label_visibility="collapsed", key="sqft")
@@ -110,7 +110,7 @@ with col1:
 
     # Year Built slider
     st.markdown(
-        f"<p><strong>Year Built:</strong> <span id='year-value'></span></p>",
+        "<p><strong>Year Built:</strong> <span id='year-value'></span></p>",
         unsafe_allow_html=True,
     )
     year_built = st.slider(
@@ -247,10 +247,17 @@ with col2:
         # Display placeholder message
         st.markdown(
             """
-        <div style="display: flex; height: 300px; align-items: center; justify-content: center; color: #6b7280; text-align: center;">
+        <div style="
+            display: flex;
+            height: 300px;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            text-align: center;
+        ">
             Fill out the form and click "Predict Price" to see the estimated house price.
         </div>
-        """,
+            """,
             unsafe_allow_html=True,
         )
 

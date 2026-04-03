@@ -3,9 +3,9 @@ services:
     image: voa2000/house-price-model:latest 
     build:
       context: .
-      dockerfile: src/api/Dockerfile
+      dockerfile: model_app/src/api/Dockerfile
     ports:
-      - "8002:8000"
+      - "8008:8000"
     container_name: model-app
     networks:
       - house-price-network

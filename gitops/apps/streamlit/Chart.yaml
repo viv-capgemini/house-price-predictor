@@ -1,0 +1,8 @@
+apiVersion: v2
+name: streamlit
+description: Streamlit UI for the House Price Prediction model
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+maintainers:
+  - name: Viv

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "streamlit.fullname" . }}
+  labels:
+    app: {{ include "streamlit.name" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "streamlit.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "streamlit.name" . }}
+    spec:
+      containers:
+      - name: streamlit
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        env:
+        - name: MODEL_URL
+          value: "{{ .Values.model.url }}"
+        ports:
+        - name: http
+          containerPort: {{ .Values.service.port }}
+        - name: metrics
+          containerPort: {{ .Values.service.metricsPort }}
+        command:
+          - "streamlit"
+          - "run"
+          - "app.py"
+          - "--server.address=0.0.0.0"
+          - "--server.port={{ .Values.service.port }}"
+        resources:
+{{- toYaml .Values.resources | nindent 10 }}
+        livenessProbe:
+{{- toYaml .Values.livenessProbe | nindent 10 }}
+        readinessProbe:
+{{- toYaml .Values.readinessProbe | nindent 10 }}

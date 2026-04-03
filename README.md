@@ -4,32 +4,42 @@ Welcome to the **House Price Predictor** project! This is a real-world, end-to-e
 
 You'll start from raw data and move through data preprocessing, feature engineering, experimentation, model tracking with MLflow, and optionally using Jupyter for exploration – all while applying industry-grade tooling.
 
-> 🚀 **Want to master MLOps from scratch?**  
-Check out the [MLOps Bootcamp at School of DevOps](https://schoolofdevops.com) to level up your skills.
+We finalise it with GitHub Actions to perform the above, create a model with FastAPI and save to dockerhub.
 
+The API is wrapped around Stremlit.
+Streamlit is the frontend of your machine‑learning system.
+It’s the part that real users interact with.
 ---
 
 ## 📦 Project Structure
 
 ```
 house-price-predictor/
+|── .github/workflows/
+|    |── mlops-pipeline.yaml     # Pipeline to train,build,test model and update Helm
+|    |── streamlit-ci.yaml       # Pipeline build and test streamlit app and update Helm
 ├── configs/                     # YAML-based configuration for models
 ├── data/                        # Raw and processed datasets
 ├── deployment/
 |   ├── kubernetes/              # Kubernetes manifest files
 |   ├── mlflow/                  # Docker Compose setup for MLflow 
-│   └── charts/
-|        ├── prometheus
-|        ├── house-price-model
-|        ├──
-|         
+│   └── monitoring/              # Values file for deploying Helm chart
+|── gitops/
+|   |── apps\
+|   |   |── model                # Helm Chart for deploying Model
+|   |   |── streamlit            # Helm Chart for deploying streamlit
+|   |── argocd                   # Manifest to deploy to argocd
+|        
 ├── models/                      # Trained models and preprocessors
 ├── notebooks/                   # Optional Jupyter notebooks for experimentation
 ├── src/
+|   |── src
+|   |   |── api                  # API Application 
 │   ├── data/                    # Data cleaning and preprocessing scripts
 │   ├── features/                # Feature engineering pipeline
 │   ├── models/                  # Model training and evaluation
 ├── requirements.txt             # Python dependencies
+|── streamlit_app                # Streamlit Application
 └── README.md                    # You’re here!
 ```
 ---
@@ -43,30 +53,22 @@ To begin, ensure the following tools are installed on your system:
 - [Visual Studio Code](https://code.visualstudio.com/) or your preferred editor
 - [UV – Python package and environment manager](https://github.com/astral-sh/uv)
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) 
-
 ---
 
 ## 🚀 Preparing Your Environment
 
-**Build a KIND cluster:**
+**Build a K3s cluster:**
   ```
-  git clone https://github.com/initcron/k8s-code.git
-  cd k8s-code/helper/kind/
-  kind create cluster --config kind-three-node-cluster.yaml
-  kubectl cluster-info --context kind-kind
-  kubectl get nodes
+
   ```
 
 1. **Fork this repo** on GitHub.
-
-2. **Clone your forked copy:**
-
    ```bash
-   git clone git@gitlab.com:machine-learning2861113/house-price-model.git
-   cd house-price-model
+   https://github.com/viv-capgemini/house-price-predictor.git
+   cd house-price-predictor
    ```
 
-3. **Setup Python Virtual Environment using UV:**
+2. **Setup Python Virtual Environment using UV:**
   - Install on Ubuntu curl -LsSf https://astral.sh/uv/install.sh | sh
   - uv --version
 
@@ -75,7 +77,7 @@ To begin, ensure the following tools are installed on your system:
    source .venv/bin/activate
    ```
 
-4. **Install dependencies:**
+3. **Install dependencies:**
 
    ```bash
    uv pip install -r requirements.txt
@@ -117,7 +119,6 @@ Clean and preprocess the raw housing dataset:
 ```bash
 python src/data/run_processing.py   --input data/raw/house_data.csv   --output data/processed/cleaned_house_data.csv
 ```
-
 ---
 
 ### 🧠 Step 2: Feature Engineering
@@ -151,7 +152,6 @@ python src/models/train_model.py \
 The code for both the apps are available in `src/api` and `streamlit_app` already. To build and launch these apps 
 
 Set API_URL=http://localhost:8000` in the streamlit app's environment. 
-
 
 Once you have launched both the apps, you should be able to access streamlit web ui and make predictions. 
 

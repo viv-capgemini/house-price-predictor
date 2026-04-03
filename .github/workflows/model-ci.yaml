@@ -1,14 +1,10 @@
-name: Streamlit CI Pipeline
-
-permissions:
-  contents: write
-  
+name: Model CI Pipeline
 on:
   push:
     branches: [ "${BRANCH_NAME}" ]
     paths:
-      - 'streamlit_app/**'
-      - .github/workflows/streamlit-ci.yaml
+      - 'model_app/**'
+      - .github/workflows/model-ci.yaml
   workflow_dispatch:
 
 jobs:
@@ -27,11 +23,9 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r streamlit_app/requirements.txt
+          pip install -r model_app/src/api/requirements.txt
           pip install flake8
 
-      - name: Lint with flake8
-        run: flake8 streamlit_app/ --max-line-length=120
 #---------------------------------------------------------------
   build-and-push:
     needs: lint
@@ -49,7 +43,7 @@ jobs:
         uses: mathieudutour/github-tag-action@v6.2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          tag_prefix: streamlit-
+          tag_prefix: model-
           default_bump: patch
 
       - name: Set up QEMU
@@ -65,16 +59,16 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Streamlit image (amd64 + arm64)
+      - name: Build and push Model image (amd64 + arm64)
         uses: docker/build-push-action@v6
         with:
-          context: ./streamlit_app
-          file: ./streamlit_app/Dockerfile
+          context: .
+          file: ./model_app/src/api/Dockerfile
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/hpp-streamlit:latest
-            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/hpp-streamlit:${{ steps.tag.outputs.new_tag }}
+            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/hpp-model:latest
+            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/hpp-model:${{ steps.tag.outputs.new_tag }}
 #---------------------------------------------------------------
   update-gitops:
     needs: build-and-push
@@ -86,11 +80,11 @@ jobs:
           repository: ${{ github.repository }}
           path: gitops
 
-      - name: Update Streamlit Helm chart values.yaml with tag
+      - name: Update Model Helm chart values.yaml with tag
         env:
           IMAGE_TAG: ${{ needs.build-and-push.outputs.image_tag }}
         run: |
-          cd gitops/gitops/apps/streamlit
+          cd gitops/gitops/apps/model
           yq -i '.image.tag = env(IMAGE_TAG)' values.yaml
 
       - name: Commit and push changes to GitOps repo
@@ -113,5 +107,5 @@ jobs:
             git stash pop || true
 
             git add .
-            git commit -m "chore: update Streamlit image to ${IMAGE_TAG}" || echo "No changes to commit"
+            git commit -m "chore: update Model image to ${IMAGE_TAG}" || echo "No changes to commit"
             git push origin "${BRANCH_NAME}"

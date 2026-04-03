@@ -1,0 +1,63 @@
+image:
+  repository: voa2000/hpp-streamlit
+  tag: streamlit-0.0.1-dev.2
+  pullPolicy: Always
+service:
+  type: NodePort
+  port: 8501
+  nodePort: 30000
+  metricsPort: 9100
+model:
+  url: "http://model.default.svc.cluster.local:8000/predict"
+resources:
+  requests:
+    cpu: "200m"
+    memory: "256Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+livenessProbe:
+  httpGet:
+    path: /_stcore/health
+    port: http
+  initialDelaySeconds: 15
+  periodSeconds: 20
+  failureThreshold: 3
+readinessProbe:
+  httpGet:
+    path: /_stcore/health
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  failureThreshold: 3
+prometheus:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+    interval: 30s
+    scrapeTimeout: 10s
+    metricRelabelings:
+      - sourceLabels: [__name__]
+        regex: "streamlit_request_duration_seconds.*"
+        action: keep
+serviceAccount:
+  create: false
+  automount: true
+  annotations: {}
+  name: ""
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: null
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  hosts:
+    - host: streamlit.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []

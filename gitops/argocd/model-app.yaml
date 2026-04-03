@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: model
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/viv-capgemini/house-price-predictor.git
+    targetRevision: dev
+    path: gitops/apps/model
+    helm:
+      valueFiles:
+        - values.yaml
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
