@@ -30,6 +30,16 @@ readinessProbe:
   initialDelaySeconds: 10
   periodSeconds: 10
   failureThreshold: 3
+ingress:
+  enabled: true
+  className: ""
+  annotations: {}
+  hosts:
+    - host: model.local
+      paths:
+        - path: /
+          pathType: Prefix
+  tls: []
 autoscaling:
   keda:
     enabled: true
