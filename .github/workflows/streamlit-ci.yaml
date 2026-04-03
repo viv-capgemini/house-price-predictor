@@ -83,7 +83,7 @@ jobs:
       - name: Checkout GitOps repo
         uses: actions/checkout@v5
         with:
-          repository: ${{ secrets.DOCKERHUB_USERNAME }}/streamlit
+          repository: ${{ github.repository }}
           token: ${{ secrets.GH_PAT }}
           path: gitops
 
