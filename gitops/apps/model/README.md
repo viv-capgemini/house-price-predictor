@@ -64,6 +64,6 @@ helm test model \
 ### 4) Verify Runtime Resources
 
 ```bash
-kubectl --context kind-kind get deploy,svc,scaledobject,vpa -n default
+kubectl --context kind-kind get deploy,svc,vpa -n default
 kubectl --context kind-kind rollout status deploy/model -n default
 ```
