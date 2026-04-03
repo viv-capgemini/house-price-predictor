@@ -17,33 +17,37 @@ It’s the part that real users interact with.
 house-price-predictor/
 ├── .github/
 │   └── workflows/
-│       ├── mlops-pipeline.yaml
-│       ├── model-ci.yaml
-│       └── streamlit-ci.yaml
+│       ├── mlops-pipeline.yaml       # CI: data processing → feature engineering → model training
+│       ├── model-ci.yaml             # CI: lint, build & push FastAPI Docker image, update gitops
+│       └── streamlit-ci.yaml         # CI: lint, build & push Streamlit Docker image, update gitops
 ├── configs/
+│   └── model_config.yaml             # Hyperparameters and training configuration
 ├── data/
+│   ├── raw/                          # Original unmodified source data
+│   └── processed/                    # Cleaned and feature-engineered datasets
 ├── deployment/
-│   └── services/
-│       ├── 1-monitoring/
-│       ├── 2-keda/
-│       ├── 3-argocd/
-│       └── mlflow/
+│   └── services/                     # Ordered deployment steps for cluster services
+│       ├── 1-monitoring/             # Prometheus + Grafana via kube-prometheus-stack Helm chart
+│       ├── 2-keda/                   # KEDA event-driven autoscaler installation
+│       ├── 3-argocd/                 # ArgoCD GitOps controller and NodePort service patch
+│       └── mlflow/                   # MLflow tracking server (docker-compose)
 ├── gitops/
 │   ├── apps/
-│   │   ├── model/
-│   │   └── streamlit/
-│   └── argocd/
+│   │   ├── model/                    # Helm chart for FastAPI model service (NodePort, Ingress, KEDA, VPA)
+│   │   └── streamlit/                # Helm chart for Streamlit frontend (HPA, Ingress)
+│   └── argocd/                       # ArgoCD Application manifests pointing to gitops/apps
 ├── model_app/
 │   └── src/
-│       ├── api/
-│       ├── data-processing/
-│       ├── feature-engineering/
-│       └── model-training/
+│       ├── api/                      # FastAPI app: prediction endpoints, Dockerfile, schemas
+│       ├── data-processing/          # Script to clean raw data and handle outliers
+│       ├── feature-engineering/      # Script to transform features and fit preprocessor
+│       └── model-training/           # Script to train XGBoost model and log to MLflow
 ├── models/
-├── notebooks/
-├── streamlit_app/
-├── docker-compose.yml
-├── requirements.txt
+│   └── trained/                      # Serialised model (house_price_model.pkl) and preprocessor
+├── notebooks/                        # Exploratory Jupyter notebooks (EDA, experimentation)
+├── streamlit_app/                    # Streamlit frontend app and Dockerfile
+├── docker-compose.yml                # Local dev: builds and runs model + streamlit containers
+├── requirements.txt                  # Top-level Python dependencies for notebooks/scripts
 └── README.md
 ```
 ---
