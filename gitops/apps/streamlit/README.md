@@ -10,16 +10,14 @@
 
 ```bash
 helm install streamlit gitops/apps/streamlit \
-  --namespace default \
-  --kube-context kind-kind
+  --namespace default 
 ```
 
 ## Update (Upgrade)
 
 ```bash
 helm upgrade streamlit gitops/apps/streamlit \
-  --namespace default \
-  --kube-context kind-kind
+  --namespace default 
 ```
 
 ## Update With Overrides
@@ -27,7 +25,6 @@ helm upgrade streamlit gitops/apps/streamlit \
 ```bash
 helm upgrade streamlit gitops/apps/streamlit \
   --namespace default \
-  --kube-context kind-kind \
   --set image.tag=v1.0.2
 ```
 
@@ -35,8 +32,7 @@ helm upgrade streamlit gitops/apps/streamlit \
 
 ```bash
 helm uninstall streamlit \
-  --namespace default \
-  --kube-context kind-kind
+  --namespace default 
 ```
 
 ## Testing
@@ -57,8 +53,7 @@ helm lint gitops/apps/streamlit
 
 ```bash
 helm test streamlit \
-  --namespace default \
-  --kube-context kind-kind
+  --namespace default 
 ```
 
 ### 4) Verify Runtime Resources

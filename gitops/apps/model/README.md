@@ -26,7 +26,6 @@ helm upgrade model gitops/apps/model \
 ```bash
 helm upgrade model gitops/apps/model \
 	--namespace default \
-	--kube-context kind-kind \
 	--set image.tag=v1.0.3
 ```
 
@@ -34,8 +33,7 @@ helm upgrade model gitops/apps/model \
 
 ```bash
 helm uninstall model \
-	--namespace default \
-	--kube-context kind-kind
+	--namespace default 
 ```
 
 ## Testing

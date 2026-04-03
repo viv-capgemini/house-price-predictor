@@ -42,3 +42,4 @@ dist/
 
 # Streamlit specific ignores
 #
+deployment/services/autoscaler/
