@@ -1,6 +1,6 @@
 image:
   repository: voa2000/hppstreamlit
-  tag: v0.0.1-dev.8
+  tag: v0.0.1-dev.10
   pullPolicy: Always
 service:
   type: NodePort
