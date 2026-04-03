@@ -57,25 +57,18 @@ To begin, ensure the following tools are installed on your system:
 
 ## 🚀 Preparing Your Environment
 
-**Build a KIND cluster:**
+**Build a K3s cluster:**
   ```
-  git clone https://github.com/initcron/k8s-code.git
-  cd k8s-code/helper/kind/
-  kind create cluster --config kind-three-node-cluster.yaml
-  kubectl cluster-info --context kind-kind
-  kubectl get nodes
+
   ```
 
 1. **Fork this repo** on GitHub.
-
-2. **Clone your forked copy:**
-
    ```bash
-   git clone git@gitlab.com:machine-learning2861113/house-price-model.git
-   cd house-price-model
+   https://github.com/viv-capgemini/house-price-predictor.git
+   cd house-price-predictor
    ```
 
-3. **Setup Python Virtual Environment using UV:**
+2. **Setup Python Virtual Environment using UV:**
   - Install on Ubuntu curl -LsSf https://astral.sh/uv/install.sh | sh
   - uv --version
 
@@ -84,7 +77,7 @@ To begin, ensure the following tools are installed on your system:
    source .venv/bin/activate
    ```
 
-4. **Install dependencies:**
+3. **Install dependencies:**
 
    ```bash
    uv pip install -r requirements.txt

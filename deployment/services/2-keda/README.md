@@ -1,8 +1,4 @@
-### Install Helm 
-
-curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
-chmod 700 get_helm.sh
-sudo ./get_helm.sh
+# Load Testing
 
 ### Auto Scaling Models with KEDA
 ```
@@ -14,7 +10,13 @@ helm install keda kedacore/keda \
 ```
 Check installation of KEDA
 `kubectl get all -n keda`
-# Add Resource Spec to the Model Pod Deployment Manifest file
+### Instal VPA
+```
+git clone https://github.com/kubernetes/autoscaler.git
+cd autoscaler/vertical-pod-autoscaler/
+./hack/vpa-up.sh
+```
+### Add Resource Spec to the Model Pod Deployment Manifest file
 # Apply the ScaledObject Manifest
 `kubectl create -f deployment/services/1-keda/fastapi-scaledobject.yaml`
 ```
@@ -43,7 +45,7 @@ File : `predict.json`
     "location": "Urban"
 }
 
-## Load Test with Hey
+### Load Test with Hey
 - installation of hey on mack ```brew install hey```
 - Make a prediction
 ```

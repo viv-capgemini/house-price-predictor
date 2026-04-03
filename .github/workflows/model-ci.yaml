@@ -67,7 +67,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/model:latest
+            docker.io/${{ secrets.DOCKERHUB_USERNAME }}/hpp-model:latest
             docker.io/${{ secrets.DOCKERHUB_USERNAME }}/model:${{ steps.tag.outputs.new_tag }}
 #---------------------------------------------------------------
   update-gitops:

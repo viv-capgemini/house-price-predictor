@@ -1,5 +1,5 @@
 image:
-  repository: voa2000/house-price-model
+  repository: voa2000/hpp-model
   tag: v0.0.1-dev.9
   pullPolicy: Always
 service:
@@ -27,6 +27,24 @@ readinessProbe:
   periodSeconds: 10
   failureThreshold: 3
 autoscaling:
+  keda:
+    enabled: true
+    name: fastapi-latency-autoscaler
+    minReplicaCount: 1
+    maxReplicaCount: 10
+    pollingInterval: 30
+    cooldownPeriod: 300
+    prometheusServerAddress: http://prometheus-kube-prometheus-prometheus.monitoring.svc:9090
+    latencyMetricName: fastapi_latency_p95
+    latencyQuery: |
+      histogram_quantile(0.95,
+        sum(rate(http_request_duration_seconds_bucket[1m])) by (le))
+    latencyThreshold: "0.08"
+    requestRateMetricName: request_rate
+    requestRateQuery: sum(rate(http_requests_total[1m]))
+    requestRateThreshold: "20"
+    cpuMetricType: Utilization
+    cpuValue: "70"
   vpa:
     enabled: true
     name: model

@@ -6,12 +6,11 @@
 - Helm 3 installed
 - Current directory is repo root
 
-## Install
+## Install Model
 
 ```bash
 helm install model gitops/apps/model \
-	--namespace default \
-	--kube-context kind-kind
+	--namespace default 
 ```
 
 ## Update (Upgrade)
@@ -57,13 +56,12 @@ helm lint gitops/apps/model
 
 ```bash
 helm test model \
-	--namespace default \
-	--kube-context kind-kind
+	--namespace default 
 ```
 
 ### 4) Verify Runtime Resources
 
 ```bash
-kubectl --context kind-kind get deploy,svc,vpa -n default
-kubectl --context kind-kind rollout status deploy/model -n default
+kubectl get deploy,svc,vpa -n default
+kubectl rollout status deploy/model -n default
 ```

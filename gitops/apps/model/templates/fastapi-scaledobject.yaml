@@ -1,0 +1,33 @@
+{{- if .Values.autoscaling.keda.enabled }}
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: {{ .Values.autoscaling.keda.name }}
+  labels:
+    app: {{ include "model.name" . }}
+spec:
+  scaleTargetRef:
+    name: {{ include "model.fullname" . }}
+  minReplicaCount: {{ .Values.autoscaling.keda.minReplicaCount }}
+  maxReplicaCount: {{ .Values.autoscaling.keda.maxReplicaCount }}
+  pollingInterval: {{ .Values.autoscaling.keda.pollingInterval }}
+  cooldownPeriod: {{ .Values.autoscaling.keda.cooldownPeriod }}
+  triggers:
+    - type: prometheus
+      metadata:
+        serverAddress: {{ .Values.autoscaling.keda.prometheusServerAddress | quote }}
+        metricName: {{ .Values.autoscaling.keda.latencyMetricName | quote }}
+        query: |
+{{ .Values.autoscaling.keda.latencyQuery | nindent 10 }}
+        threshold: {{ .Values.autoscaling.keda.latencyThreshold | quote }}
+    - type: prometheus
+      metadata:
+        serverAddress: {{ .Values.autoscaling.keda.prometheusServerAddress | quote }}
+        metricName: {{ .Values.autoscaling.keda.requestRateMetricName | quote }}
+        query: {{ .Values.autoscaling.keda.requestRateQuery | quote }}
+        threshold: {{ .Values.autoscaling.keda.requestRateThreshold | quote }}
+    - type: cpu
+      metricType: {{ .Values.autoscaling.keda.cpuMetricType }}
+      metadata:
+        value: {{ .Values.autoscaling.keda.cpuValue | quote }}
+{{- end }}
