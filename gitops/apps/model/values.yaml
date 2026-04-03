@@ -1,6 +1,6 @@
 image:
   repository: voa2000/hpp-model
-  tag: latest
+  tag: model-0.0.1-dev.3
   pullPolicy: Always
 service:
   type: NodePort
@@ -62,4 +62,3 @@ autoscaling:
     controlledResources:
       - cpu
       - memory
-  
