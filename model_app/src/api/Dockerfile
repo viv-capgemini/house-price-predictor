@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.11.9-slim-bookworm
 WORKDIR /app
 COPY model_app/src/api/requirements.txt ./requirements.txt
 RUN apt-get update && apt-get install -y --no-install-recommends gcc python3-dev curl \

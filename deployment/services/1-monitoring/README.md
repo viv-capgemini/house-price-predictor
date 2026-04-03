@@ -23,7 +23,7 @@ helm repo update
 
 ## Install the helm chart to setup Prometheus and Grafana
 ```
-helm upgrade --install prometheus   -n monitoring   --create-namespace   prometheus-community/kube-prometheus-stack   -f deployment/services/monitoring/values.yml
+helm upgrade --install prometheus   -n monitoring   --create-namespace   prometheus-community/kube-prometheus-stack   -f deployment/services/1-monitoring/values.yml
 ```
 - status of endpoint can be found here - http://yourip:30300/targets
 - Get password with `kubectl get secret --namespace monitoring -l app.kubernetes.io/component=admin-secret -o jsonpath="{.items[0].data.admin-password}" | base64 --decode ; echo`
