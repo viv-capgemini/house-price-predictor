@@ -20,30 +20,34 @@ kubectl patch secret argocd-secret -n argocd \
 kubectl rollout restart deployment argocd-server -n argocd
 
 
-### Endpoint
+### Expose Argocd on Nodeport to access outside cluster but on same network
 
 kubectl apply -f deployment/argocd/argocd-server-nodeport.yaml
-
-Argo CD UI (HTTP): http://localhost:32080
+### Endpoints
+Argo CD UI (HTTP): http://hostip:32400
 Argo CD UI (HTTPS): https://localhost:32443
+Username: admin
+Password: NEWPASSWORD
 
-### Auto scaling
-
+### Application Auto scaling
 kubectl apply --server-side -f https://github.com/kedacore/keda/releases/download/v2.19.0/keda-2.19.0-core.yaml
-### Install Argocd CLI
 
+### Install Argocd CLI
 sudo curl -sSL -o /usr/local/bin/argocd \
   https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
 
 sudo chmod +x /usr/local/bin/argocd
 
 
-### Login and apply deployment
+### Login to argocd via cli
+argocd login localhost:32400 --username admin --password NEWPASSWORD --insecure
 
-argocd login 192.168.0.217:32400 --username admin --password NEWPASSWORD --insecure
-
+### Add repo
 argocd repo add https://github.com/viv-capgemini/house-price-predictor.git
-kubectl apply -f deployment/argocd/house-price-predictor-app.yaml -n argocd\n
-argocd app get house-price-predictor\n
+
+### Create argocd applications
+kubectl apply -f gitops/argocd/model-app.yaml -n argocd
+kubectl apply -f gitops/argocd/streamlit-app.yaml -n argocd
+argocd app get house-price-predictor
 
 kubectl -n argocd get svc argocd-server

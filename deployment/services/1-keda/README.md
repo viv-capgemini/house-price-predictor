@@ -1,4 +1,10 @@
-# Auto Scaling Models with KEDA
+### Install Helm 
+
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-4
+chmod 700 get_helm.sh
+sudo ./get_helm.sh
+
+### Auto Scaling Models with KEDA
 ```
 helm repo add kedacore https://kedacore.github.io/charts
 helm repo update
@@ -10,7 +16,7 @@ Check installation of KEDA
 `kubectl get all -n keda`
 # Add Resource Spec to the Model Pod Deployment Manifest file
 # Apply the ScaledObject Manifest
-`kubectl apply -f fastapi-scaledobject.yaml`
+`kubectl create -f deployment/services/1-keda/fastapi-scaledobject.yaml`
 ```
 kubectl get scaledobject
 kubectl get hpa # KEDA will create a linked HPA here
