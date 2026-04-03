@@ -1,7 +1,7 @@
 name: Streamlit CI Pipeline
 
-env:
-  GH_PAT : ${{ secrets.GH_PAT  }}
+permissions:
+  contents: write
   
 on:
   push:
@@ -84,7 +84,6 @@ jobs:
         uses: actions/checkout@v5
         with:
           repository: ${{ github.repository }}
-          token: ${{ secrets.GH_PAT }}
           path: gitops
 
       - name: Update Streamlit Helm chart values.yaml with tag
