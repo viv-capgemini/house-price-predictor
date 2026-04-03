@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/viv-capgemini/house-price-predictor.git
-    targetRevision: dev
+    targetRevision: main
     path: gitops/apps/model
     helm:
       valueFiles:
