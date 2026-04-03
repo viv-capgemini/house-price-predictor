@@ -15,32 +15,36 @@ It’s the part that real users interact with.
 
 ```
 house-price-predictor/
-|── .github/workflows/
-|    |── mlops-pipeline.yaml     # Pipeline to train,build,test model and update Helm
-|    |── streamlit-ci.yaml       # Pipeline build and test streamlit app and update Helm
-├── configs/                     # YAML-based configuration for models
-├── data/                        # Raw and processed datasets
+├── .github/
+│   └── workflows/
+│       ├── mlops-pipeline.yaml
+│       ├── model-ci.yaml
+│       └── streamlit-ci.yaml
+├── configs/
+├── data/
 ├── deployment/
-|   ├── kubernetes/              # Kubernetes manifest files
-|   ├── mlflow/                  # Docker Compose setup for MLflow 
-│   └── monitoring/              # Values file for deploying Helm chart
-|── gitops/
-|   |── apps\
-|   |   |── model                # Helm Chart for deploying Model
-|   |   |── streamlit            # Helm Chart for deploying streamlit
-|   |── argocd                   # Manifest to deploy to argocd
-|        
-├── models/                      # Trained models and preprocessors
-├── notebooks/                   # Optional Jupyter notebooks for experimentation
-├── src/
-|   |── src
-|   |   |── api                  # API Application 
-│   ├── data/                    # Data cleaning and preprocessing scripts
-│   ├── features/                # Feature engineering pipeline
-│   ├── models/                  # Model training and evaluation
-├── requirements.txt             # Python dependencies
-|── streamlit_app                # Streamlit Application
-└── README.md                    # You’re here!
+│   └── services/
+│       ├── 1-monitoring/
+│       ├── 2-keda/
+│       ├── 3-argocd/
+│       └── mlflow/
+├── gitops/
+│   ├── apps/
+│   │   ├── model/
+│   │   └── streamlit/
+│   └── argocd/
+├── model_app/
+│   └── src/
+│       ├── api/
+│       ├── data-processing/
+│       ├── feature-engineering/
+│       └── model-training/
+├── models/
+├── notebooks/
+├── streamlit_app/
+├── docker-compose.yml
+├── requirements.txt
+└── README.md
 ```
 ---
 
@@ -57,9 +61,12 @@ To begin, ensure the following tools are installed on your system:
 
 ## 🚀 Preparing Your Environment
 
-**Build a K3s cluster:**
+**🚀 1. Install a k3s cluster (single node)**
   ```
-
+  curl -sfL https://get.k3s.io | sh -
+  /etc/rancher/k3s/k3s.yaml
+  sudo chmod 644 /etc/rancher/k3s/k3s.yaml
+  export KUBECONFIG=/etc/rancher/k3s/k3s.yaml
   ```
 
 1. **Fork this repo** on GitHub.
