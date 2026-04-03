@@ -1,6 +1,6 @@
 image:
   repository: voa2000/hpp-model
-  tag: v0.0.1-dev.9
+  tag: latest
   pullPolicy: Always
 service:
   port: 8000
