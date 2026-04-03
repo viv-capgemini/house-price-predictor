@@ -1,17 +1,14 @@
 image:
   repository: voa2000/streamlit
-  tag: v1.0.2
+  tag: v0.0.1-dev.8
   pullPolicy: Always
-
 service:
   type: NodePort
   port: 8501
   nodePort: 30000
   metricsPort: 9100
-
 model:
   url: "http://model.default.svc.cluster.local:8000/predict"
-
 resources:
   requests:
     cpu: "200m"
@@ -19,7 +16,6 @@ resources:
   limits:
     cpu: "500m"
     memory: "512Mi"
-
 livenessProbe:
   httpGet:
     path: /_stcore/health
@@ -27,7 +23,6 @@ livenessProbe:
   initialDelaySeconds: 15
   periodSeconds: 20
   failureThreshold: 3
-
 readinessProbe:
   httpGet:
     path: /_stcore/health
@@ -35,7 +30,6 @@ readinessProbe:
   initialDelaySeconds: 10
   periodSeconds: 10
   failureThreshold: 3
-
 prometheus:
   enabled: true
   serviceMonitor:
@@ -45,21 +39,18 @@ prometheus:
     metricRelabelings:
       - sourceLabels: [__name__]
         regex: "streamlit_request_duration_seconds.*"
-        action: keep  
-
+        action: keep
 serviceAccount:
   create: false
   automount: true
   annotations: {}
   name: ""
-
 autoscaling:
   enabled: false
   minReplicas: 1
   maxReplicas: 3
   targetCPUUtilizationPercentage: 80
   targetMemoryUtilizationPercentage: null
-
 ingress:
   enabled: false
   className: ""
