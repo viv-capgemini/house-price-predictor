@@ -1,4 +1,8 @@
 name: Streamlit CI Pipeline
+
+env:
+  GH_PAT : ${{ secrets.GH_PAT  }}
+  
 on:
   push:
     branches: [ dev ]

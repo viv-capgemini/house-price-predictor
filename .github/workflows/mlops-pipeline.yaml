@@ -52,7 +52,7 @@ jobs:
     - name: Engineer features
       run: |
         mkdir -p models/trained
-        python model_app/src/feature-engineering/run_engineer.py \
+        python model_app/src/feature_engineering/run_engineer.py \
           --input data/processed/cleaned_house_data.csv \
           --output data/processed/featured_house_data.csv \
           --preprocessor models/trained/preprocessor.pkl
