@@ -1,12 +1,10 @@
 image:
   repository: voa2000/house-price-model
-  tag: v1.0.3
+  tag: v0.0.1-dev.9
   pullPolicy: Always
-
 service:
   port: 8000
   metricsPort: 9100
-
 resources:
   requests:
     cpu: "500m"
@@ -14,7 +12,6 @@ resources:
   limits:
     cpu: "1"
     memory: "512Mi"
-
 livenessProbe:
   httpGet:
     path: /health
@@ -22,7 +19,6 @@ livenessProbe:
   initialDelaySeconds: 15
   periodSeconds: 20
   failureThreshold: 3
-
 readinessProbe:
   httpGet:
     path: /health
@@ -30,7 +26,6 @@ readinessProbe:
   initialDelaySeconds: 10
   periodSeconds: 10
   failureThreshold: 3
-
 autoscaling:
   vpa:
     enabled: true
@@ -45,7 +40,6 @@ autoscaling:
     controlledResources:
       - cpu
       - memory
-
   keda:
     enabled: true
     name: fastapi-latency-autoscaler
