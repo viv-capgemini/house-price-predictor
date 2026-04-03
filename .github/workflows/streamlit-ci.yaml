@@ -5,7 +5,7 @@ permissions:
   
 on:
   push:
-    branches: [ dev ]
+    branches: [ "${BRANCH_NAME}" ]
     paths:
       - 'streamlit_app/**'
       - .github/workflows/streamlit-ci.yaml
@@ -96,6 +96,7 @@ jobs:
       - name: Commit and push changes to GitOps repo
         env:
           IMAGE_TAG: ${{ needs.build-and-push.outputs.image_tag }}
+          BRANCH_NAME: ${{ github.ref_name }}
         run: |
             cd gitops
             git config user.name "github-actions"
@@ -104,13 +105,13 @@ jobs:
             # Stash any uncommitted changes
             git stash || true
 
-            git fetch origin dev
-            git checkout dev
-            git pull --rebase origin dev
+            git fetch origin "${BRANCH_NAME}"
+            git checkout "${BRANCH_NAME}"
+            git pull --rebase origin "${BRANCH_NAME}"
 
             # Re-apply stashed changes
             git stash pop || true
 
             git add .
             git commit -m "chore: update Streamlit image to ${IMAGE_TAG}" || echo "No changes to commit"
-            git push origin dev
+            git push origin "${BRANCH_NAME}"
