@@ -1,5 +1,21 @@
 # 🏠 House Price Predictor – An MLOps Learning Project
 
+---
+
+## MLOps = DevOps Practices for Machine Learning
+
+MLOps takes proven DevOps ideas and applies them to ML systems.
+
+| DevOps Concept | MLOps Equivalent |
+|----------------|------------------|
+| Source code versioning | Data + model versioning |
+| CI pipelines | Model training pipelines |
+| CD pipelines | Automated model deployment |
+| Monitoring services | Monitoring model performance |
+| Rollbacks | Model version rollback |
+| Automation | End-to-end ML lifecycle automation |
+
+
 Welcome to the **House Price Predictor** project! This is a real-world, end-to-end MLOps use case designed to help you master the art of building and operationalizing machine learning pipelines.
 
 You'll start from raw data and move through data preprocessing, feature engineering, experimentation, model tracking with MLflow, and optionally using Jupyter for exploration – all while applying industry-grade tooling.
